@@ -1,0 +1,81 @@
+---
+- name: Set asdf_source Variable
+  set_fact:
+    "asdf_source": "{{ asdf_user_home }}/.asdf/asdf.sh"
+
+- name: Install Homebrew Packages
+  become: True
+  become_user: "{{ asdf_user }}"
+  community.general.homebrew:
+    name: "{{ asdf_darwin_optional_dependencies }}"
+    state: upgraded
+  retries: "{{ asdf_homebrew_retries }}"
+  delay: 3
+  register: install_optional_dependencies
+  until: install_optional_dependencies is not failed
+
+- name: Install asdf Plugins
+  become: True
+  become_user: "{{ asdf_user }}"
+  command: "bash -lc 'source {{ asdf_source }}; asdf plugin-add {{ item.name }} {{ item.repository | default() }}'"
+  args:
+    creates: "{{ asdf_user_home }}/.asdf/plugins/{{ item.name }}"
+    chdir: "{{ asdf_user_home }}"
+  with_items: "{{ asdf_plugins }}"
+  when: asdf_plugins|length > 0
+  ignore_errors: True
+
+- name: Install OSX Specific Plugin Configuration
+  include_tasks: "plugins_darwin/install.yml"
+  with_items: "{{ asdf_plugins }}"
+  when: plugin.name in asdf_darwin_plugin_dependencies
+  loop_control:
+    loop_var: plugin
+
+- name: Install asdf Apps
+  become: True
+  become_user: "{{ asdf_user }}"
+  command: "bash -lc 'source {{ asdf_source }}; asdf install {{ item.0.name }} {{ item.1 }}'"
+  environment: "{{ item[0]['environment'] | default({}) }}"
+  args:
+    creates: "{{ asdf_user_home }}/.asdf/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ asdf_user_home }}"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - versions
+    - flags:
+      skip_missing: True
+  when: asdf_plugins|length > 0
+
+- name: Uninstall asdf Apps
+  become: True
+  become_user: "{{ asdf_user }}"
+  command: "bash -lc 'source {{ asdf_source }}; asdf uninstall {{ item.0.name }} {{ item.1 }}'"
+  args:
+    removes: "{{ asdf_user_home }}/.asdf/installs/{{ item.0.name }}/{{ item.1 }}"
+    chdir: "{{ asdf_user_home }}"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - delete_versions
+    - flags:
+      skip_missing: True
+  when: asdf_plugins|length > 0
+
+- name: Set Global App Versions
+  become: True
+  become_user: "{{ asdf_user }}"
+  command: "bash -lc 'source {{ asdf_source }}; asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
+  args:
+    chdir: "{{ asdf_user_home }}"
+  when: item.versions is defined
+  changed_when: false
+  with_items: "{{ asdf_plugins }}"
+
+- name: Set asdfrc
+  become: True
+  become_user: "{{ asdf_user }}"
+  template:
+    src: "asdfrc.j2"
+    dest: "{{ asdf_user_home }}/.asdfrc"
+    owner: "{{ asdf_user }}"
+    mode: 0644

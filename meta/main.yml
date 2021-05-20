@@ -3,7 +3,7 @@ galaxy_info:
   role_name: asdf
   namespace: osx_provisioner
   author: Niall Byrne
-  description: Installs the ASDF version manager on OSX machines.
+  description: Ansible role that installs the asdf version manager on OSX machines.
   company: Shared Vision Solutions
   license: MPL-2
   platforms:
@@ -15,4 +15,5 @@ galaxy_info:
   galaxy_tags:
     - osx
 
-dependencies: []
+dependencies:
+  - geerlingguy.homebrew

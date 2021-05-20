@@ -2,8 +2,6 @@
 - name: Converge
   hosts: all
   connection: local
-  vars:
-
   tasks:
     - name: Load Scenario Variables
       include_vars: vars/main.yml

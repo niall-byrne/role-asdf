@@ -1,0 +1,20 @@
+---
+- name: Install asdf Global Homebrew Packages
+  become: True
+  become_user: "{{ asdf_user }}"
+  community.general.homebrew:
+    name: "{{ asdf_darwin_global_dependencies }}"
+    state: upgraded
+  retries: "{{ asdf_homebrew_retries }}"
+  delay: 3
+  register: install_darwin_global_dependencies
+  until: install_darwin_global_dependencies is not failed
+  when: ansible_os_family == "Darwin"
+
+- name: Install asdf
+  become: True
+  become_user: "{{ asdf_user }}"
+  git:
+    repo: "https://github.com/asdf-vm/asdf.git"
+    dest: "{{ asdf_user_home }}/.asdf"
+    version: "{{ asdf_version }}"

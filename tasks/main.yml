@@ -1,5 +1,11 @@
 ---
 # tasks file for role-asdf
 
-- name: Placeholder Task
-  debug: msg="Your dedication and hard work goes here."
+- name: Install asdf
+  import_tasks: "install.yml"
+  tags: [asdf, asdf-install]
+
+- name: Install asdf Plugins on OSX
+  import_tasks: "plugins_darwin/main.yml"
+  when: ansible_os_family == "Darwin"
+  tags: [asdf, asdf-plugins]

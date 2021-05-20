@@ -1,0 +1,22 @@
+---
+- name: Install Plugin Specific Dependencies with Homebrew
+  become: True
+  become_user: "{{ asdf_user }}"
+  community.general.homebrew:
+    name: "{{ asdf_darwin_plugin_dependencies[plugin.name] }}"
+    state: upgraded
+  retries: "{{ asdf_homebrew_retries }}"
+  delay: 3
+  register: install_plugin_dependencies
+  until: install_plugin_dependencies is not failed
+  when: ansible_os_family == "Darwin"
+
+- name: Check for Plugin Task File
+  stat:
+    path: "{{ role_path }}/tasks/plugins_darwin/plugin_tasks/{{ plugin.name }}.yml"
+  delegate_to: localhost
+  register: task_file
+
+- name: Run Plugin Task File
+  include_tasks: "plugins_darwin/plugin_tasks/{{ plugin.name }}.yml"
+  when: task_file.stat.exists

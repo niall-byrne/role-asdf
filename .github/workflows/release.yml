@@ -61,8 +61,8 @@ jobs:
 
       - name: Publish to Galaxy -- Report Job Status (Success)
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" "automated ansible galaxy import has been completed!"
+          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: automated ansible galaxy import has been completed!"
       - name: Publish to Galaxy -- Report Job Status (Failure)
         if: failure()
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" "automated ansible galaxy import has failed!"
+          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: automated ansible galaxy import has failed!"

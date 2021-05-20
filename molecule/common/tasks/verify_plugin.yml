@@ -1,0 +1,12 @@
+---
+- name: Check that the plugin was installed
+  stat:
+    path: "{{ asdf_user_home }}/.asdf/plugins/{{ asdf_plugins[0].name }}"
+  register: asdf_plugin
+
+- name: Assert plugin was installed
+  assert:
+    that:
+      - asdf_plugin.stat.exists
+      - asdf_plugin.stat.pw_name == asdf_user
+    msg: "The asdf plugin folder must exist."

@@ -1,2 +1,32 @@
 ---
-# defaults file for role-asdf
+# defaults file for asdf
+asdf_version: "v0.8.1"
+asdf_user: "{{ lookup('env', 'USER') }}"
+asdf_user_home: "{{ lookup('env', 'HOME') }}"
+asdf_legacy_version_file: "yes"
+asdf_homebrew_retries: 3
+
+asdf_plugins: []
+# asdf_plugins:
+#   - name: "erlang"
+#     environment_variables: []  (Optional key to specify environment specific information for OSX builds.)
+#     repository: ""
+#     versions:
+#       - 18.3
+#       - 20.1
+#     delete_versions: []
+#     global: 20.1
+
+asdf_darwin_global_dependencies:
+  - coreutils
+  - openssl
+  - readline
+
+asdf_darwin_optional_dependencies: []
+
+asdf_darwin_plugin_dependencies:
+  erlang: ["autoconf", "fop", "libyaml", "libxslt", "libtool", "unixodbc", "wxmac"]
+  nodejs: ["gpg", "gnupg"]
+  php: []
+  ruby: []
+  python: ["sqlite3", "xz", "zlib"]
