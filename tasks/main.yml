@@ -1,0 +1,5 @@
+---
+# tasks file for role-asdf
+
+- name: Placeholder Task
+  debug: msg="Your dedication and hard work goes here."

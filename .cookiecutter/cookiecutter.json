@@ -1,0 +1,12 @@
+{
+    "_template": "https://github.com/Shared-Vision-Solutions/ansible-workbench.git",
+    "author": "Niall Byrne",
+    "company": "Shared Vision Solutions",
+    "description": "Ansible role that installs the asdf version manager on OSX machines.",
+    "email": "niall@niallbyrne.ca",
+    "galaxy_namespace_slug": "osx_provisioner",
+    "galaxy_role_slug": "asdf",
+    "github_handle": "osx-provisioner",
+    "project_name": "role-asdf",
+    "project_slug": "role-asdf"
+}

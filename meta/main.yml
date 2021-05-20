@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: asdf
+  namespace: osx_provisioner
+  author: Niall Byrne
+  description: Installs the ASDF version manager on OSX machines.
+  company: Shared Vision Solutions
+  license: MPL-2
+  platforms:
+    - name: MacOSX
+      versions:
+        - '10.15'
+        - '10.14'
+  min_ansible_version: 3.3.0
+  galaxy_tags:
+    - osx
+
+dependencies: []

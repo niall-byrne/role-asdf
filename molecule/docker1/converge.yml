@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  connection: local
+  vars:
+
+  tasks:
+    - name: Load Scenario Variables
+      include_vars: vars/main.yml
+    - name: "Include osx_provisioner.asdf"
+      ansible.builtin.include_role:
+        name: "osx_provisioner.asdf"

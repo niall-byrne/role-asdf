@@ -1,0 +1,16 @@
+---
+sudo: required
+language: bash
+jobs:
+  include:
+    - os: osx
+      osx_image: xcode12.5
+      env:
+        - SCENARIO=hostmachine1
+before_install: []
+install:
+  - sudo python3 -m pip install poetry
+  - poetry install
+script:
+  - poetry run molecule lint
+  - poetry run molecule test -s "${SCENARIO}"

@@ -1,0 +1,10 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Load Scenario Variables
+      include_vars: vars/main.yml
+    - name: PlaceHolder Task
+      debug:
+        msg: "Verification Script."

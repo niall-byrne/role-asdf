@@ -1,0 +1,68 @@
+---
+name: role-asdf-publish-to-galaxy
+
+# Workflow Secrets:
+# SLACK_WEBHOOK              (Required, for slack notifications...)
+# GALAXY_API_KEY             (Required, for Ansible Galaxy Import...)
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      TAG:
+        description: 'Tag to Deploy'
+        required: true
+        default: ''
+
+jobs:
+  publish_to_galaxy:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+
+    steps:
+
+      - name: Publish to Galaxy -- Code Checkout (workflow dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.TAG  }}
+      - name: Publish to Galaxy -- Code Checkout (published release)
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Publish to Galaxy -- Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Publish to Galaxy -- Setup Environment
+        run: |
+          source .github/scripts/setup.sh
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Publish to Galaxy -- Install Requirements
+        run: |
+          pip install poetry
+          poetry install
+      - name: Publish to Galaxy -- Trigger Ansible Galaxy Import
+        run: |
+           ansible-galaxy role import ${USERNAME} ${PROJECT_NAME} --token ${API_KEY}
+        env:
+          API_KEY: ${{ secrets.GALAXY_API_KEY }}
+
+      - name: Publish to Galaxy -- Report Job Status (Success)
+        run: |
+          ./.github/scripts/notifications.sh "${NOTIFICATION}" "automated ansible galaxy import has been completed!"
+      - name: Publish to Galaxy -- Report Job Status (Failure)
+        if: failure()
+        run: |
+          ./.github/scripts/notifications.sh "${NOTIFICATION}" "automated ansible galaxy import has failed!"
