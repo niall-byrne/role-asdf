@@ -17,7 +17,8 @@ Ansible role that installs the asdf version manager on OSX machines.
 Requirements
 ------------
 
-None
+- Homebrew must aleady be present on the machine ([geerlingguy.mac.hombrew](https://github.com/geerlingguy/ansible-collection-mac) is a great solution for this).
+- See the [homebrew website](https://brew.sh/) for further details about this tool.
 
 Role Variables
 --------------
@@ -27,7 +28,7 @@ Each plugin should be configured in the following format:
 ```yaml
 asdf_plugins:
   - name: "erlang"        # a plugin name
-    environment: []       # an optional dictionary of environment variables for build configuration
+    environment: {}       # an optional dictionary of environment variables for build configuration
     repository: ""        # a plugin repository, optional
     versions:             # a list of versions to install
       - 23.3.3
@@ -41,7 +42,7 @@ The following variables are also configured:
   - Sets the git tag of asdf.
 - `asdf_user`:
     - Sets a user for which the role is installed.  This user needs to be able to run Homebrew to install dependencies required for asdf plugins.
-    - For further details see the [geeringguy.homebrew](https://github.com/geerlingguy/ansible-role-homebrew) repository. (You may need to set the `homebrew_user` variable as well.)
+    - For further details see the [geeringguy.mac.homebrew](https://github.com/geerlingguy/ansible-collection-mac) repository. (You may need to set the `homebrew_user` variable as well.)
     - The default value will work fine if you're simply installing for the current user.
 - `asdf_user_home`:
     - Sets the user's home folder location, if needed.  Take care to set it explicitly when installing for another user.
@@ -76,14 +77,16 @@ To create additional custom configurations simply create a task file in the [plu
 Dependencies
 ------------
 
-- geerlingguy.homebrew
+None
 
 Example Playbook
 ----------------
 
 ```yaml
-- hosts: web
+- hosts: all
   roles:
+  - role: elliotweiser.osx-command-line-tools
+  - role: geerlingguy.mac.homebrew
   - role: osx_provisioner.asdf
     asdf_plugins:
     - name: "erlang"

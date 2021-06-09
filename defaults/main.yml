@@ -9,7 +9,7 @@ asdf_homebrew_retries: 3
 asdf_plugins: []
 # asdf_plugins:
 #   - name: "erlang"
-#     environment_variables: []  (Optional key to specify environment specific information for OSX builds.)
+#     environment_variables: {}  (Optional key to specify environment specific information for OSX builds.)
 #     repository: ""
 #     versions:
 #       - 18.3

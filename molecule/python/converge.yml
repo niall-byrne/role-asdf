@@ -4,9 +4,5 @@
   connection: local
   tasks:
 
-    - name: Load Scenario Variables
-      include_vars: vars/main.yml
-
-    - name: "Include osx_provisioner.asdf"
-      ansible.builtin.include_role:
-        name: "osx_provisioner.asdf"
+    - name: Setup Scenario"
+      include_tasks: "../common/tasks/setup.yml"
