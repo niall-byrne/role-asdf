@@ -15,6 +15,10 @@ on:
         required: true
         default: ''
 
+env:
+  PROJECT_NAME: "role-asdf"
+  USERNAME: "osx-provisioner"
+
 jobs:
   publish_to_galaxy:
 
@@ -25,13 +29,13 @@ jobs:
         python-version: [3.8]
 
     steps:
-
       - name: Publish to Galaxy -- Code Checkout (workflow dispatch)
         if: github.event_name == 'workflow_dispatch'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           ref: ${{ github.event.inputs.TAG  }}
+
       - name: Publish to Galaxy -- Code Checkout (published release)
         if: github.event_name != 'workflow_dispatch'
         uses: actions/checkout@v2
@@ -53,15 +57,17 @@ jobs:
         run: |
           pip install poetry
           poetry install
+
       - name: Publish to Galaxy -- Trigger Ansible Galaxy Import
         run: |
-           ansible-galaxy role import ${USERNAME} ${PROJECT_NAME} --token ${API_KEY}
+           poetry run ansible-galaxy role import ${USERNAME} ${PROJECT_NAME} --token ${API_KEY}
         env:
           API_KEY: ${{ secrets.GALAXY_API_KEY }}
 
       - name: Publish to Galaxy -- Report Job Status (Success)
         run: |
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: automated ansible galaxy import has been completed!"
+
       - name: Publish to Galaxy -- Report Job Status (Failure)
         if: failure()
         run: |
