@@ -102,6 +102,8 @@ License
 
 MIT
 
+(asdf is also licensed as MIT)
+
 Author Information
 ------------------
 
