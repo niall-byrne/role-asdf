@@ -5,7 +5,7 @@ galaxy_info:
   author: Niall Byrne
   description: Ansible role that installs the asdf version manager on OSX machines.
   company: Shared Vision Solutions
-  license: MPL-2
+  license: MIT
   platforms:
     - name: MacOSX
       versions:

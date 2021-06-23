@@ -1,12 +1,10 @@
 # role-asdf
 
 ### Master:
-- Travis CI: ![TravisCI](https://travis-ci.com/osx-provisioner/role-asdf.svg?branch=master)
-- Github Actions: [![role-asdf](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml/badge.svg?branch=master)](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml)
+[![role-asdf](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml/badge.svg?branch=master)](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml)
 
 ### Production:
-- Travis CI: ![TravisCI](https://travis-ci.com/osx-provisioner/role-asdf.svg?branch=production)
-- Github Actions: [![role-asdf](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml/badge.svg?branch=production)](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml)
+[![role-asdf](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml/badge.svg?branch=production)](https://github.com/osx-provisioner/role-asdf/actions/workflows/push.yml)
 
 Ansible role that installs the asdf version manager on OSX machines.
 
@@ -102,7 +100,7 @@ Example Playbook
 License
 -------
 
-MPL-2
+MIT
 
 Author Information
 ------------------
