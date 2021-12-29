@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Release -- Checkout Repository
         if: contains(github.ref, '/tags/v')
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Release -- Setup Environment
         if: contains(github.ref, '/tags/v')
@@ -72,7 +72,7 @@ jobs:
 
     steps:
       - name: Documentation Test -- Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Documentation Test -- Setup Environment
         run: |
@@ -106,7 +106,7 @@ jobs:
 
     steps:
       - name: Molecule Lint -- Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Molecule Lint -- Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
@@ -151,7 +151,7 @@ jobs:
 
     steps:
       - name: OSX Build -- Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: OSX Build -- Setup python
         uses: actions/setup-python@v2
@@ -195,7 +195,7 @@ jobs:
 
     steps:
       - name: Security Test -- Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Security Test -- Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
@@ -233,7 +233,7 @@ jobs:
 
     steps:
       - name: Start -- Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Start -- Setup Environment
         run: |
@@ -257,7 +257,7 @@ jobs:
 
     steps:
       - name: Success -- Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Success -- Setup Environment
         run: |
@@ -280,7 +280,7 @@ jobs:
 
     steps:
       - name: Workflow Lint -- Checkout Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2.4.0
 
       - name: Workflow Lint -- Setup Environment
         run: |
