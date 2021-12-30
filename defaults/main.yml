@@ -26,7 +26,7 @@ asdf_darwin_optional_dependencies: []
 
 asdf_darwin_plugin_dependencies:
   erlang: ["autoconf", "fop", "libyaml", "libxslt", "libtool", "unixodbc", "wxmac"]
-  nodejs: ["gpg", "gnupg"]
+  nodejs: ["gpg", "gnupg", "node-build"]
   php: []
   ruby: []
   python: ["sqlite3", "xz", "zlib"]

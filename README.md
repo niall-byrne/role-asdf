@@ -63,7 +63,7 @@ To add extra dependencies, simply append your plugin to this list, and add the h
 ```yaml
 asdf_darwin_plugin_dependencies:
   erlang: ["autoconf", "fop", "libyaml", "libxslt", "libtool", "unixodbc", "wxmac"]
-  nodejs: ["gpg", "gnupg"]
+  nodejs: ["gpg", "gnupg", "node-build"]
   php: []
   ruby: []
   python: ["sqlite3", "xz", "zlib"]
