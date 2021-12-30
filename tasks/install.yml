@@ -11,16 +11,22 @@
   until: install_darwin_global_dependencies is not failed
   when: ansible_os_family == "Darwin"
 
-- name: Stat asdf install dir
-  stat:
-    path: "{{ asdf_user_home }}/.asdf"
-  register: asdf_install_dir
-
-- name: Install asdf
+- name: Check for existing asdf install
   become: True
   become_user: "{{ asdf_user }}"
-  when: not asdf_install_dir.stat.exists
   git:
     repo: "https://github.com/asdf-vm/asdf.git"
     dest: "{{ asdf_user_home }}/.asdf"
     version: "{{ asdf_version }}"
+    clone: no
+    update: no
+  register: asdf_existing_install
+
+- name: Install asdf
+  become: True
+  become_user: "{{ asdf_user }}"
+  git:
+    repo: "https://github.com/asdf-vm/asdf.git"
+    dest: "{{ asdf_user_home }}/.asdf"
+    version: "{{ asdf_version }}"
+  when: not asdf_existing_install.before

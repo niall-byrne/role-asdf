@@ -147,7 +147,7 @@ jobs:
         os: [10.15]
         platform: [x86_64]
         python-version: [3.8.10]
-        scenario: ["erlang", "kubectl", "no_plugins", "nodejs", "python", "ruby"]
+        scenario: ["already_present", "erlang", "kubectl", "no_plugins", "nodejs", "python", "ruby"]
 
     steps:
       - name: OSX Build -- Checkout
