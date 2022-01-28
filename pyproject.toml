@@ -9,6 +9,7 @@ python = ">=3.6.1,<4.0"
 ansible = "^4.1.0"
 
 [tool.poetry.dev-dependencies]
+ansible-compat = "!=1.0.0" # https://github.com/ansible-community/ansible-compat/issues/114
 ansible-lint = "^5.0.8"
 commitizen = "^2.17.6"
 molecule = {extras = ["docker"], version = "^3.3.0"}
