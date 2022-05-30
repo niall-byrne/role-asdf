@@ -1,20 +1,26 @@
-[tool.poetry]
-name = "role-asdf"
-version = "0.2.2"
-description = "Installs the ASDF version manager on OSX machines."
-authors = ["Niall Byrne <niall@niallbyrne.ca>"]
-
-[tool.poetry.dependencies]
-python = ">=3.8.0,<4.0"
-ansible = "^5.2.0"
-
-[tool.poetry.dev-dependencies]
-ansible-compat = "!=1.0.0" # https://github.com/ansible-community/ansible-compat/issues/114
-ansible-lint = "^5.3.2"
-commitizen = "^2.20.4"
-molecule = {extras = ["docker"], version = "^3.5.2"}
-yamllint = "^1.26.3"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+  build-backend = "poetry.core.masonry.api"
+  requires = ["poetry-core>=1.0.0"]
+
+[tool]
+
+  [tool.poetry]
+    authors = ["Niall Byrne <niall@niallbyrne.ca>"]
+    description = "Installs the ASDF version manager on OSX machines."
+    name = "role-asdf"
+    version = "0.2.2"
+
+    [tool.poetry.dependencies]
+      ansible = "^5.2.0"
+      python = ">=3.8.0,<4.0"
+
+    [tool.poetry.dev-dependencies]
+      ansible-compat = "!=2.1.0"
+      ansible-lint = "^5.3.2"
+      commitizen = "^2.20.4"
+      yamllint = "^1.26.3"
+
+      [tool.poetry.dev-dependencies.molecule]
+        extras = ["docker"]
+        version = "^3.5.2"
