@@ -34,18 +34,15 @@ jobs:
         if: contains(github.ref, '/tags/v')
         run: |
           source ./.github/scripts/setup.sh
-          echo "{}" > package.json
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Release -- Generate Changelog
         if: contains(github.ref, '/tags/v')
-        uses: scottbrenner/generate-changelog-action@v1.3.3
-        id: Changelog
-        env:
-          REPO: ${{ github.repository }}
+        run:
+          source ./.github/scripts/changelog.sh
 
-      - name: Release -- Create Github Release
+      - name: Release -- Create GitHub Release
         if: contains(github.ref, '/tags/v')
         uses: actions/create-release@v1
         env:
@@ -54,7 +51,7 @@ jobs:
           tag_name: ${{ env.BRANCH_OR_TAG }}
           release_name: Release ${{ env.BRANCH_OR_TAG }}
           body: |
-            ${{ steps.Changelog.outputs.changelog }}
+            ${{ env.CHANGE_LOG_CONTENT }}
           draft: true
           prerelease: false
 
