@@ -27,6 +27,7 @@ Each plugin should be configured in the following format:
 asdf_plugins:
   - name: "erlang"        # a plugin name
     environment: {}       # an optional dictionary of environment variables for build configuration
+    pre_install: ""       # an optional command to run directly before the installation (i.e. select a Python Interpreter for compilation)
     repository: ""        # a plugin repository, optional
     versions:             # a list of versions to install
       - 23.3.3

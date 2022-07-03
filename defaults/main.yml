@@ -10,6 +10,7 @@ asdf_plugins: []
 # asdf_plugins:
 #   - name: "erlang"
 #     environment_variables: {}  (Optional key to specify environment specific information for OSX builds.)
+#     pre_install: "" (Optional setup command to run before installation, i.e. select a Python version for compilation.)
 #     repository: ""
 #     versions:
 #       - 18.3

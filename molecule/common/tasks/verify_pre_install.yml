@@ -1,0 +1,11 @@
+---
+- name: Check that pre_install was executed
+  stat:
+    path: "{{ asdf_user_home }}/pre_install_test"
+  register: pre_install_test
+
+- name: Assert pre_install_test was executed
+  assert:
+    that:
+      - pre_install_test.stat.exists
+    msg: "The pre_install_test file must have been created."

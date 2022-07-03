@@ -18,3 +18,6 @@
 
     - name: Verify the correct version was Installed
       include_tasks: "../common/tasks/verify_binary.yml"
+
+    - name: Verify the pre_install command executed
+      include_tasks: "../common/tasks/verify_pre_install.yml"

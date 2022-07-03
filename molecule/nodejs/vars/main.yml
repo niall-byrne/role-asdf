@@ -6,6 +6,7 @@ asdf_legacy_version_file: "yes"
 asdf_plugins:
   - name: "nodejs"
     repository: ""
+    pre_install: "touch ~/pre_install_test"
     versions:
       - 14.0.0
     global: 14.0.0

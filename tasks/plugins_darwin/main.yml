@@ -36,7 +36,7 @@
 - name: Install asdf Apps
   become: True
   become_user: "{{ asdf_user }}"
-  shell: "source {{ asdf_source }}; asdf install {{ item.0.name }} {{ item.1 }}"
+  shell: "source {{ asdf_source }}; {{ item[0]['pre_install'] | default(':') }}; asdf install {{ item.0.name }} {{ item.1 }}"
   environment: "{{ item[0]['environment'] | default({}) }}"
   args:
     chdir: "{{ asdf_user_home }}"
