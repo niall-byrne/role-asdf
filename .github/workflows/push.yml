@@ -218,9 +218,8 @@ jobs:
       - name: Security Test -- Check Dependencies
         run: |
           pip install safety poetry
-          pip install --upgrade pip
           poetry install
-          safety check
+          poetry export -f requirements.txt --without-hashes | safety check --stdin
 
       - name: Security Test -- Report Job Status on Success
         if: ${{ env.VERBOSE_NOTIFICATIONS  == '1' }}
