@@ -143,7 +143,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [10.15]
+        os: [11]
         platform: [x86_64]
         python-version: [3.8.10]
         scenario: ["already_present", "erlang", "kubectl", "no_plugins", "nodejs", "python", "ruby"]
@@ -183,7 +183,6 @@ jobs:
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: OSX ${{ matrix.os }}, molecule test scenario '${SCENARIO}' failed!"
         env:
           SCENARIO: ${{ matrix.scenario}}
-
   security_test:
 
     runs-on: ubuntu-latest
