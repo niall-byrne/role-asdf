@@ -7,5 +7,5 @@ asdf_plugins:
   - name: "kubectl"
     repository: ""
     versions:
-      - 1.13.2
-    global: 1.13.2
+      - 1.26.1
+    global: 1.26.1

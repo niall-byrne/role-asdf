@@ -7,7 +7,7 @@ asdf_plugins:
   - name: "python"
     repository: ""
     versions:
-      - 3.9.1
+      - 3.9.16
     environment:
       test: value
-    global: 3.9.1
+    global: 3.9.16

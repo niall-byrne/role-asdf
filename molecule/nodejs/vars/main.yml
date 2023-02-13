@@ -8,5 +8,5 @@ asdf_plugins:
     repository: ""
     pre_install: "touch ~/pre_install_test"
     versions:
-      - 14.0.0
-    global: 14.0.0
+      - 18.0.0
+    global: 18.0.0
