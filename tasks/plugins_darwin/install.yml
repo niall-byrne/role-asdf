@@ -12,11 +12,11 @@
   when: ansible_os_family == "Darwin"
 
 - name: Check for Plugin Task File
-  stat:
+  ansible.builtin.stat:
     path: "{{ role_path }}/tasks/plugins_darwin/plugin_tasks/{{ plugin.name }}.yml"
   delegate_to: localhost
   register: task_file
 
 - name: Run Plugin Task File
-  include_tasks: "plugins_darwin/plugin_tasks/{{ plugin.name }}.yml"
+  ansible.builtin.include_tasks: "plugins_darwin/plugin_tasks/{{ plugin.name }}.yml"
   when: task_file.stat.exists

@@ -1,11 +1,11 @@
 ---
 - name: Check that asdf was installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ asdf_user_home }}/.asdf/bin/asdf"
   register: asdf_install
 
 - name: Assert asdf was installed
-  assert:
+  ansible.builtin.assert:
     that:
       - asdf_install.stat.exists
       - asdf_install.stat.pw_name == asdf_user

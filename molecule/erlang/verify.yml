@@ -8,13 +8,13 @@
   tasks:
 
     - name: Load Scenario Variables
-      include_vars: vars/main.yml
+      ansible.builtin.include_vars: vars/main.yml
 
     - name: Verify asdf was installed
-      include_tasks: "../common/tasks/verify_asdf.yml"
+      ansible.builtin.include_tasks: "../common/tasks/verify_asdf.yml"
 
     - name: Verify the correct plugin was installed
-      include_tasks: "../common/tasks/verify_plugin.yml"
+      ansible.builtin.include_tasks: "../common/tasks/verify_plugin.yml"
 
     - name: Verify the correct version was Installed
-      include_tasks: "../common/tasks/verify_binary.yml"
+      ansible.builtin.include_tasks: "../common/tasks/verify_binary.yml"

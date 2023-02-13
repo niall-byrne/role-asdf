@@ -14,7 +14,7 @@
 - name: Check for existing asdf install
   become: True
   become_user: "{{ asdf_user }}"
-  git:
+  ansible.builtin.git:
     repo: "https://github.com/asdf-vm/asdf.git"
     dest: "{{ asdf_user_home }}/.asdf"
     version: "{{ asdf_version }}"
@@ -25,7 +25,7 @@
 - name: Install asdf
   become: True
   become_user: "{{ asdf_user }}"
-  git:
+  ansible.builtin.git:
     repo: "https://github.com/asdf-vm/asdf.git"
     dest: "{{ asdf_user_home }}/.asdf"
     version: "{{ asdf_version }}"
