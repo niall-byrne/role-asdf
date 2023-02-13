@@ -15,32 +15,19 @@ Ansible role that installs the asdf version manager on OSX machines.
 Requirements
 ------------
 
-- Homebrew must aleady be present on the machine ([geerlingguy.mac.hombrew](https://github.com/geerlingguy/ansible-collection-mac) is a great solution for this).
-- See the [homebrew website](https://brew.sh/) for further details about this tool.
+- [Homebrew](https://brew.sh/) must already be present on the machine ([geerlingguy.mac.homebrew](https://github.com/geerlingguy/ansible-collection-mac) is a great solution for this).
+
 
 Role Variables
 --------------
 
-Each plugin should be configured in the following format:
+### Global Configuration
 
-```yaml
-asdf_plugins:
-  - name: "erlang"        # a plugin name
-    environment: {}       # an optional dictionary of environment variables for build configuration
-    pre_install: ""       # an optional command to run directly before the installation (i.e. select a Python Interpreter for compilation)
-    repository: ""        # a plugin repository, optional
-    versions:             # a list of versions to install
-      - 23.3.3
-      - 23.3.4
-    delete_versions: []   # a list of existing versions that will be removed
-    global: 23.3.4        # set as a global version, optional
-```
-
-The following variables are also configured:
+The following variables are globally configured:
 - `asdf_version`:
-  - Sets the git tag of asdf.
+  - Sets the tag or branch of asdf to install.
 - `asdf_user`:
-    - Sets a user for which the role is installed.  This user needs to be able to run Homebrew to install dependencies required for asdf plugins.
+    - Sets a user for which the role is installed.  This user needs to be able to run Homebrew to install the dependencies required for asdf plugins.
     - For further details see the [geeringguy.mac.homebrew](https://github.com/geerlingguy/ansible-collection-mac) repository. (You may need to set the `homebrew_user` variable as well.)
     - The default value will work fine if you're simply installing for the current user.
 - `asdf_user_home`:
@@ -54,7 +41,22 @@ The following variables are also configured:
 - `asdf_darwin_optional_dependencies`:
     - Sets additional requirements that will be installed with any asdf plugin install.
 
-[See The Default Values](defaults/main.yml)
+### Global Package Manifest
+
+Each plugin should be configured in the following dictionary:
+
+```yaml
+asdf_plugins:
+  - name: "erlang"        # a plugin name
+    environment: {}       # an optional dictionary of environment variables for build configuration
+    pre_install: ""       # an optional command to run directly before the installation (i.e. select a Python Interpreter for compilation)
+    repository: ""        # a plugin repository, optional
+    versions:             # a list of versions to install
+      - 23.3.3
+      - 23.3.4
+    delete_versions: []   # a list of existing versions that will be removed
+    global: 23.3.4        # set as a global version, optional
+```
 
 ### Plugin Specific Configuration
 
@@ -73,6 +75,10 @@ asdf_darwin_plugin_dependencies:
 To create additional custom configurations simply create a task file in the [plugin_tasks](./tasks/plugins_darwin/plugin_tasks) folder in the format: `(PLUGIN_NAME).yaml`
 (i.e. `python.yml`, `nodejs.yml`)
 
+### Default Values
+
+[See The Default Values](defaults/main.yml)
+
 Dependencies
 ------------
 
@@ -82,9 +88,9 @@ Example Playbook
 ----------------
 
 ```yaml
-- hosts: all
+- hosts: web
   roles:
-  - role: elliotweiser.osx-command-line-tools
+  - role: elliotweiser.osx-command-line-tools  # Dependency of geerlingguy.mac.homebrew
   - role: geerlingguy.mac.homebrew
   - role: osx_provisioner.asdf
     asdf_plugins:
