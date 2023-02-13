@@ -7,10 +7,14 @@ galaxy_info:
   company: Shared Vision Solutions
   license: MIT
   platforms:
+    - name: macOS
+      versions:
+        - Monterey
+        - Big-Sur
     - name: MacOSX
       versions:
-        - '10.15'
-        - '10.14'
+        - "10.15"
+        - "10.14"
   min_ansible_version: 3.3.0
   galaxy_tags:
     - osx
