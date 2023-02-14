@@ -66,7 +66,7 @@ jobs:
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: error reporting job status!"
 
   create_release:
-    needs: [_start_notification, documentation_test, molecule_lint, osx_build, security_test, workflow_lint]
+    needs: [_start_notification, documentation_test, molecule_lint, osx_build, security_test, toml_lint, workflow_lint]
 
     runs-on: ubuntu-latest
 
@@ -285,6 +285,36 @@ jobs:
         if: failure()
         run: |
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: security checks failed!"
+
+  toml_lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Toml Lint -- Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Toml Lint -- Setup Environment
+        run: |
+          source ./.github/scripts/setup.sh
+          sudo apt-get install -y golang-github-pelletier-go-toml
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Toml Lint -- Run Linter
+        run: |
+          tomll pyproject.toml
+          git diff --exit-code
+
+      - name: Toml Lint -- Report Job Status (Success)
+        if: env.VERBOSE_NOTIFICATIONS == '1'
+        run: |
+          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: toml linting was successful!"
+
+      - name: Toml Lint -- Report Job Status (Failure)
+        if: failure()
+        run: |
+          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: toml linting has failed!"
 
   workflow_lint:
 
