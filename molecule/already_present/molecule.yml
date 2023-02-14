@@ -4,6 +4,7 @@ dependency:
   options:
     role-file: requirements.yml
     requirements-file: requirements.yml
+    timeout: "120"
 driver:
   name: delegated
   options:
