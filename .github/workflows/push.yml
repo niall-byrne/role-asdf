@@ -174,35 +174,65 @@ jobs:
     steps:
       - name: Molecule Lint -- Checkout Repository
         uses: actions/checkout@v3
+        with:
+          path: 'role'
+
+      - name: Molecule Lint -- Setup Environment
+        run: |
+          source ./role/.github/scripts/setup.sh
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Molecule Lint -- Install Poetry
+        run: |
+          source ./role/.github/scripts/poetry.sh
 
       - name: Molecule Lint -- Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Molecule Lint -- Setup Environment
+      - name: Molecule Lint -- Initialize Cache Locations
         run: |
-          source ./.github/scripts/setup.sh
-        env:
-          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          mkdir -p ~/.cache/pypoetry/virtualenvs/
+          source ./role/.github/scripts/ansible_cache.sh  \
+            "$(pwd)/ansible_cache/ansible-compat"         \
+            ~/.cache/ansible-compat
+          source ./role/.github/scripts/ansible_cache.sh  \
+            "$(pwd)/ansible_cache/molecule"               \
+            ~/.cache/molecule
+
+      - name: Molecule Lint -- Mount Ansible Cache
+        uses: actions/cache@v3
+        with:
+          key: ansible-${{ hashFiles('./role/requirements.yml') }}-${{ env.CACHE_TTL }}
+          path: ansible_cache
+
+      - name: Molecule Lint -- Mount Poetry Cache
+        uses: actions/cache@v3
+        with:
+          key: poetry-${{ hashFiles('./role/pyproject.toml') }}-${{ runner.os }}-${{ env.CACHE_TTL }}
+          path: ~/.cache/pypoetry/virtualenvs/
 
       - name: Molecule Lint -- Install Requirements
         run: |
-          source ./.github/scripts/build.sh
+          cd role
+          poetry install
 
       - name: Molecule Lint -- Run Linter
         run: |
+          cd role
           poetry run molecule lint
 
       - name: Molecule Lint -- Report Job Status (Success)
         if: env.VERBOSE_NOTIFICATIONS == '1'
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: molecule linting was successful!"
+          ./role/.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: molecule linting was successful!"
 
       - name: Molecule Lint -- Report Job Status (Failure)
         if: failure()
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: molecule linting has failed!"
+          ./role/.github/scripts/notifications.sh "${NOTIFICATION}" ":x: molecule linting has failed!"
 
   osx_build:
 
@@ -218,36 +248,83 @@ jobs:
     steps:
       - name: OSX Build -- Checkout
         uses: actions/checkout@v3
+        with:
+          path: 'role'
+
+      - name: OSX Build -- Setup Environment
+        run: |
+          source ./role/.github/scripts/setup.sh
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: OSX Build -- Install Poetry
+        run: |
+          source ./role/.github/scripts/poetry.sh
 
       - name: OSX Build -- Setup python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: OSX Build -- Setup Environment
+      - name: OSX Build -- Initialize Cache Locations
         run: |
-          source ./.github/scripts/setup.sh
-          source ./.github/scripts/build.sh
+          mkdir -p ~/.cache/pypoetry/virtualenvs
+          source ./role/.github/scripts/ansible_cache.sh  \
+            "$(pwd)/ansible_cache/ansible-compat"         \
+            ~/.cache/ansible-compat
+          source ./role/.github/scripts/ansible_cache.sh  \
+            "$(pwd)/ansible_cache/molecule"               \
+            ~/.cache/molecule
+
+      - name: OSX Build -- Mount Ansible Cache
+        uses: actions/cache@v3
+        with:
+          key: ansible-${{ hashFiles('./role/requirements.yml') }}-${{ env.CACHE_TTL }}
+          path: ansible_cache
+
+      - name: OSX Build -- Mount Poetry Cache
+        uses: actions/cache@v3
+        with:
+          key: poetry-${{ hashFiles('./role/pyproject.toml') }}-${{ runner.os }}-${{ env.CACHE_TTL }}
+          path: ~/Library/Caches/pypoetry/virtualenvs
+
+      - name: OSX Build -- Install Requirements
+        run: |
+          cd role
+          poetry install
+
+      - name: OSX Build -- Reuse Cached Dependencies as Scenario
+        run: |
+          cd role
+          poetry run molecule dependency
+          mv ~/.cache/molecule/role/default ~/.cache/molecule/role/"${SCENARIO}"
         env:
-          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SCENARIO: ${{ matrix.scenario }}
 
       - name: OSX Build -- Molecule Scenario
         run: |
+          cd role
           poetry run molecule test -s "${SCENARIO}"
+        env:
+          SCENARIO: ${{ matrix.scenario }}
+
+      - name: OSX Build -- Reuse Scenario Dependencies as Cache
+        run: |
+          mv ~/.cache/molecule/role/"${SCENARIO}" ~/.cache/molecule/role/default
         env:
           SCENARIO: ${{ matrix.scenario }}
 
       - name: OSX Build -- Report Job Status (Success)
         if: env.VERBOSE_NOTIFICATIONS == '1'
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: OSX ${{ matrix.os }}, molecule test scenario '${SCENARIO}' was successful"
+          ./role/.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: OSX ${{ matrix.os }}, molecule test scenario '${SCENARIO}' was successful"
         env:
           SCENARIO: ${{ matrix.scenario }}
 
       - name: OSX Build -- Report Job Status (Failure)
         if: failure()
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: OSX ${{ matrix.os }}, molecule test scenario '${SCENARIO}' failed!"
+          ./role/.github/scripts/notifications.sh "${NOTIFICATION}" ":x: OSX ${{ matrix.os }}, molecule test scenario '${SCENARIO}' failed!"
         env:
           SCENARIO: ${{ matrix.scenario }}
 

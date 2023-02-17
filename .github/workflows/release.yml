@@ -34,6 +34,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          path: 'role'
           ref: ${{ github.event.inputs.TAG  }}
 
       - name: Publish to Galaxy -- Code Checkout (published release)
@@ -41,34 +42,50 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          path: 'role'
+
+      - name: Publish to Galaxy -- Setup Environment
+        run: |
+          source ./role/.github/scripts/setup.sh
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Publish to Galaxy -- Install Poetry
+        run: |
+          source ./role/.github/scripts/poetry.sh
 
       - name: Publish to Galaxy -- Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Publish to Galaxy -- Setup Environment
+      - name: Publish to Galaxy -- Initialize Cache Locations
         run: |
-          source .github/scripts/setup.sh
-        env:
-          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          mkdir -p ~/.cache/pypoetry/virtualenvs/
+
+      - name: Publish to Galaxy -- Mount Poetry Cache
+        uses: actions/cache@v3
+        with:
+          key: poetry-${{ hashFiles('./role/pyproject.toml') }}-${{ runner.os }}-${{ env.CACHE_TTL }}
+          path: ~/.cache/pypoetry/virtualenvs/
 
       - name: Publish to Galaxy -- Install Requirements
         run: |
-          pip install poetry
+          cd role
           poetry install
 
       - name: Publish to Galaxy -- Trigger Ansible Galaxy Import
         run: |
-           poetry run ansible-galaxy role import ${USERNAME} ${PROJECT_NAME} --token ${API_KEY}
+          cd role
+          poetry run ansible-galaxy role import ${USERNAME} ${PROJECT_NAME} --token ${API_KEY}
         env:
           API_KEY: ${{ secrets.GALAXY_API_KEY }}
 
       - name: Publish to Galaxy -- Report Job Status (Success)
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: automated ansible galaxy import has been completed!"
+          ./role/.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: automated ansible galaxy import has been completed!"
 
       - name: Publish to Galaxy -- Report Job Status (Failure)
         if: failure()
         run: |
-          ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: automated ansible galaxy import has failed!"
+          ./role/.github/scripts/notifications.sh "${NOTIFICATION}" ":x: automated ansible galaxy import has failed!"

@@ -14,8 +14,9 @@ main() {
   {
     echo "ANSIBLE_ROLES_PATH=.."
     echo "BRANCH_OR_TAG=${BRANCH_OR_TAG}"
-    echo "WEBHOOK_URL=${WEBHOOK_URL}"
+    echo "CACHE_TTL=$(date +%d)"
     echo "NOTIFICATION=${PROJECT_NAME} [<${WORKFLOW_URL}|${BRANCH_OR_TAG}>]"
+    echo "WEBHOOK_URL=${WEBHOOK_URL}"
   } >> "$GITHUB_ENV"
 
 }
