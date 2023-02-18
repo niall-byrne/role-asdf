@@ -10,9 +10,7 @@
 set -eo pipefail
 
 main() {
-  pip install poetry
-
-  if [[ "v$(poetry version -s)" != "${BRANCH_OR_TAG}" ]]; then
+  if [[ "$(poetry version -s)" != "${BRANCH_OR_TAG}" ]]; then
     echo "The 'pyproject.toml' file does not match the version tag!"
     exit 127
   fi

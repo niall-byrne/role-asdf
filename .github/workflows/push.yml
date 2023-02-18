@@ -75,7 +75,7 @@ jobs:
         id: branch_filter
         run: |
           MATCH="FALSE"
-          [[ "${{ github.event.ref }}" =~ /tags/v\.* ]] && MATCH="TRUE"
+          [[ "${{ github.event.ref }}" =~ /tags/[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$ ]] && MATCH="TRUE"
           echo "MATCH=${MATCH}" >> $GITHUB_OUTPUT
 
       - name: Create Release -- Checkout Repository
@@ -90,6 +90,11 @@ jobs:
           source ./.github/scripts/setup.sh
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Create Release -- Install Poetry
+        if: steps.branch_filter.outputs.match == 'TRUE'
+        run: |
+          source ./.github/scripts/poetry.sh
 
       - name: Create Release -- Check 'pyproject.toml' Matches Tag
         if: steps.branch_filter.outputs.match == 'TRUE'
