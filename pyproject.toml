@@ -9,7 +9,7 @@
     authors = ["Niall Byrne <niall@niallbyrne.ca>"]
     description = "Installs the ASDF version manager on OSX machines."
     name = "role-asdf"
-    version = "0.3.1"
+    version = "0.3.2"
 
     [tool.poetry.dependencies]
       python = ">=3.9.0,<4.0"
