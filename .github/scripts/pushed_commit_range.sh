@@ -11,7 +11,9 @@ set -eo pipefail
 
 
 get_all_commits() {
+
   git rev-list --max-parents=0 HEAD
+
 }
 
 
@@ -23,11 +25,9 @@ main() {
     PUSHED_COMMIT_RANGE="$(get_all_commits)"
   fi
 
-  set +e
-    if ! git rev-parse "${PUSHED_COMMIT_RANGE}"; then
-      PUSHED_COMMIT_RANGE="$(get_all_commits)"
-    fi
-  set -e
+  if ! git rev-parse "${PUSHED_COMMIT_RANGE}"; then
+    PUSHED_COMMIT_RANGE="$(get_all_commits)"
+  fi
 
   {
     echo "PUSHED_COMMIT_RANGE<<EOF"
