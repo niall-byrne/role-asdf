@@ -12,9 +12,10 @@ set -eo pipefail
 main() {
 
   echo "{}" > package.json
-  TAG="$(git tag | tr -d "v" | sort --version-sort | tail -n 2 | head -n 1)"
-  git tag | grep "^${TAG}\$" || TAG="v${TAG}"
+
+  TAG="$(git tag -l --sort=refname | grep -E "[0-9]+\.[0-9]+\.[0-9]+" | tail -n 2 | head -n 1)"
   CHANGE_LOG_CONTENT="$(npx -q generate-changelog -f - -t "${TAG}")"
+
   {
     echo "CHANGE_LOG_CONTENT<<EOF"
     echo "${CHANGE_LOG_CONTENT}"

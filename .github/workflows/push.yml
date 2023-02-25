@@ -66,7 +66,7 @@ jobs:
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: error reporting job status!"
 
   create_release:
-    needs: [_start_notification, documentation_test, molecule_lint, osx_build, security_test, toml_lint, workflow_lint]
+    needs: [_start_notification, documentation_test, molecule_lint, osx_build, security_test, toml_lint, yaml_lint]
 
     runs-on: ubuntu-latest
 
@@ -153,7 +153,7 @@ jobs:
           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Documentation Test -- Documentation Validation
-        uses: gaurav-nelson/github-action-markdown-link-check@1.0.13
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: 'no'
           use-verbose-mode: 'yes'
@@ -392,33 +392,33 @@ jobs:
         run: |
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: toml linting has failed!"
 
-  workflow_lint:
+  yaml_lint:
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Workflow Lint -- Checkout Repository
+      - name: Yaml Lint -- Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Workflow Lint -- Setup Environment
+      - name: Yaml Lint -- Setup Environment
         run: |
           source ./.github/scripts/setup.sh
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: Workflow Lint -- Run Linter
+      - name: Yaml Lint -- Run Linter
         uses: ibiqlik/action-yamllint@v3
         with:
           format: standard
           file_or_dir: ./.github/workflows
           config_file: ./.yamllint
 
-      - name: Workflow Lint -- Report Job Status (Success)
+      - name: Yaml Lint -- Report Job Status (Success)
         if: env.VERBOSE_NOTIFICATIONS == '1'
         run: |
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":white_check_mark: workflow linting was successful!"
 
-      - name: Workflow Lint -- Report Job Status (Failure)
+      - name: Yaml Lint -- Report Job Status (Failure)
         if: failure()
         run: |
           ./.github/scripts/notifications.sh "${NOTIFICATION}" ":x: workflow linting has failed!"

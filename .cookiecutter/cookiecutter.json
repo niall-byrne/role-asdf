@@ -1,5 +1,5 @@
 {
-    "_template": "https://github.com/shared-vision-solutions/ansible-workbench.git",
+    "_template": "https://github.com/niall-byrne/ansible-workbench.git",
     "author": "Niall Byrne",
     "company": "Shared Vision Solutions",
     "description": "Ansible role that installs the asdf version manager on OSX machines.",

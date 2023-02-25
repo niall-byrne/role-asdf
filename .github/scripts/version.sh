@@ -10,10 +10,12 @@
 set -eo pipefail
 
 main() {
+
   if [[ "$(poetry version -s)" != "${BRANCH_OR_TAG}" ]]; then
     echo "The 'pyproject.toml' file does not match the version tag!"
     exit 127
   fi
+
 }
 
 main  "$@"
