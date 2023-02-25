@@ -88,7 +88,7 @@ Example Playbook
 ----------------
 
 ```yaml
-- hosts: web
+- hosts: all
   roles:
   - role: elliotweiser.osx-command-line-tools  # Dependency of geerlingguy.mac.homebrew
   - role: geerlingguy.mac.homebrew
